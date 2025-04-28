@@ -1,0 +1,17 @@
+---
+- name: Initial setup for servers
+  hosts: k3s
+
+  tasks:
+    - name: Include variables from Ansible vault file
+      ansible.builtin.include_vars: "../vars/secrets.yml"
+
+    - name: Server baseline
+      ansible.builtin.include_role:
+        name: "../roles/k3s_node_baseline"
+      vars:
+        server_baseline_created_username: jordan
+        server_baseline_timezone: America/New_York
+        server_baseline_ubuntu_packages:
+          - qemu-guest-agent
+...

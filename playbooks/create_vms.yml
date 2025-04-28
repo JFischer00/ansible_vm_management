@@ -1,0 +1,101 @@
+---
+- hosts: proxmox  
+  tasks:
+    - name: Import variables from Ansible vault
+      ansible.builtin.include_vars: ../vars/secrets.yml
+
+    - name: Ensure python3-pip is installed
+      ansible.builtin.apt:
+        name: python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Ensure proxmoxer is installed
+      ansible.builtin.apt:
+        name: python3-proxmoxer
+        state: present
+        update_cache: yes
+
+    - name: Deploy VMs
+      ansible.builtin.include_role: 
+        name: joshrnoll.homelab.create_proxmox_vms
+      vars:
+        # Proxmox credentials
+        create_proxmox_vms_proxmox_username: "{{ proxmox_username }}"
+        create_proxmox_vms_proxmox_api_token_id: "{{ proxmox_token_id }}"
+        create_proxmox_vms_proxmox_api_token_secret: "{{ proxmox_token_secret }}"
+
+        # VMs to be created
+        create_proxmox_vms_list:
+          - name: k3s-node01
+            vmid: 221
+            template: 8000
+            node: prox
+            sshkeys: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+            storage: local-lvm
+            disk_size: 10G
+            ip_address: 192.168.0.221/24
+            gateway: 192.168.0.1
+            nameservers:
+              - 192.168.0.202
+
+          - name: k3s-node02
+            vmid: 222
+            template: 8000
+            node: prox
+            sshkeys: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+            storage: local-lvm
+            disk_size: 10G
+            ip_address: 192.168.0.222/24
+            gateway: 192.168.0.1
+            nameservers:
+              - 192.168.0.202
+
+          - name: k3s-node03
+            vmid: 223
+            template: 8000
+            node: prox
+            sshkeys: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+            storage: local-lvm
+            disk_size: 10G
+            ip_address: 192.168.0.223/24
+            gateway: 192.168.0.1
+            nameservers:
+              - 192.168.0.202
+
+          - name: k3s-node04
+            vmid: 224
+            template: 8000
+            node: prox
+            sshkeys: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+            storage: local-lvm
+            disk_size: 10G
+            ip_address: 192.168.0.224/24
+            gateway: 192.168.0.1
+            nameservers:
+              - 192.168.0.202
+
+          - name: k3s-node05
+            vmid: 225
+            template: 8000
+            node: prox
+            sshkeys: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+            storage: local-lvm
+            disk_size: 10G
+            ip_address: 192.168.0.225/24
+            gateway: 192.168.0.1
+            nameservers:
+              - 192.168.0.202
+          
+          - name: k3s-node06
+            vmid: 226
+            template: 8000
+            node: prox
+            sshkeys: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}"
+            storage: local-lvm
+            disk_size: 10G
+            ip_address: 192.168.0.226/24
+            gateway: 192.168.0.1
+            nameservers:
+              - 192.168.0.202
+...

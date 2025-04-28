@@ -1,0 +1,7 @@
+---
+server_baseline_ubuntu_packages_default:
+  - curl
+  - nano
+  - git
+  - ufw
+...
